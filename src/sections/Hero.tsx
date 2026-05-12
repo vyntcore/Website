@@ -14,7 +14,7 @@ if (typeof window !== "undefined") {
 const FRAME_COUNT = 121;
 const getFramePath = (index: number) => {
   const paddedIndex = index.toString().padStart(3, "0");
-  return `/frames/sphere_revolve/ezgif-frame-${paddedIndex}.jpg`;
+  return `/frames/Sphere_revolve/ezgif-frame-${paddedIndex}.jpg`;
 };
 
 export default function Hero() {

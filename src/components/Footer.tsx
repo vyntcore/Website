@@ -16,7 +16,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="inline-flex items-center gap-1 mb-6 group">
-              <img src="/logo/logo.png" alt="VyntCore Logo" className="h-10 md:h-14 w-auto object-contain mix-blend-screen group-hover:scale-105 transition-all duration-300" />
+              <img src="/logo/logo.PNG" alt="VyntCore Logo" className="h-10 md:h-14 w-auto object-contain mix-blend-screen group-hover:scale-105 transition-all duration-300" />
               <span className="font-heading text-3xl font-bold tracking-tighter text-white -ml-1">
                 Vynt<span className="text-[var(--color-emerald-accent)]">Core</span>
               </span>

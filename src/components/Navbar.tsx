@@ -31,7 +31,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1 z-50 group">
-          <img src="/logo/logo.png" alt="VyntCore Logo" className="h-10 md:h-14 w-auto object-contain mix-blend-screen group-hover:scale-105 transition-transform duration-300" />
+          <img src="/logo/logo.PNG" alt="VyntCore Logo" className="h-10 md:h-14 w-auto object-contain mix-blend-screen group-hover:scale-105 transition-transform duration-300" />
           <span className="font-heading text-2xl font-bold tracking-tighter text-white -ml-1">
             Vynt<span className="text-[var(--color-emerald-accent)]">Core</span>
           </span>
