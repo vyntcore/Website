@@ -73,43 +73,41 @@ export default function Hero() {
     
     // We use matchMedia to ensure animations are optimized per device if necessary,
     // but a global timeline works well here.
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "+=300%",
-        scrub: true, // Use true instead of 0.5 to prevent double-smoothing with Lenis
-        pin: true,
-        anticipatePin: 1,
-      },
+    const st = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top top",
+      end: "+=300%",
+      scrub: true,
+      pin: true,
+      anticipatePin: 1,
+      animation: gsap.timeline()
+        .to(animationState, {
+          frame: FRAME_COUNT - 1,
+          snap: "frame",
+          ease: "none",
+          onUpdate: () => render(animationState.frame),
+        }, 0)
+        .to(textRef.current, {
+          opacity: 0,
+          y: -50,
+          ease: "power2.inOut",
+        }, 0),
     });
 
-    tl.to(animationState, {
-      frame: FRAME_COUNT - 1,
-      snap: "frame",
-      ease: "none",
-      onUpdate: () => render(animationState.frame),
-    }, 0);
-
-    // Fade out text as user scrolls down
-    tl.to(textRef.current, {
-      opacity: 0,
-      y: -50,
-      ease: "power2.inOut",
-    }, 0);
-
-    // Refresh ScrollTrigger to ensure correct height calculations after images load
-    setTimeout(() => {
+    // Refresh ScrollTrigger after DOM settles to fix pin height calculation
+    requestAnimationFrame(() => {
       ScrollTrigger.refresh();
-    }, 100);
+    });
 
-    const handleResize = () => render(animationState.frame);
+    const handleResize = () => {
+      render(animationState.frame);
+      ScrollTrigger.refresh();
+    };
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      tl.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      st.kill();
     };
   }, [imagesLoaded]);
 

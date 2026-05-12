@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
+import { ReactLenis, useLenis } from "lenis/react";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,18 +13,25 @@ interface SmoothScrollProps {
   children: ReactNode;
 }
 
+function ScrollSync() {
+  // This hook gives us direct access to the Lenis instance
+  useLenis((lenis) => {
+    // Notify ScrollTrigger every time Lenis updates scroll position
+    ScrollTrigger.update();
+  });
+  return null;
+}
+
 export default function SmoothScroll({ children }: SmoothScrollProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lenisRef = useRef<any>(null);
 
   useEffect(() => {
     function update(time: number) {
       lenisRef.current?.lenis?.raf(time * 1000);
     }
-    
-    // Bind Lenis to GSAP's master ticker
+
     gsap.ticker.add(update);
-    
-    // Prevent GSAP's lag smoothing from causing jumping
     gsap.ticker.lagSmoothing(0);
 
     return () => {
@@ -33,7 +40,8 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   }, []);
 
   return (
-    <ReactLenis root ref={lenisRef} autoRaf={false} options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+    <ReactLenis root ref={lenisRef} autoRaf={false} options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
+      <ScrollSync />
       {children}
     </ReactLenis>
   );
