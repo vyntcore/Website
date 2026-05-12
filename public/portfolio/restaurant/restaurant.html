@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉLÉVATION | Culinary Artistry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=Inter:wght@200;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-deep: #0a0a0a;
+            --bg-surface: #141414;
+            --accent: #c5a368;
+            --text-main: #f4f4f4;
+            --text-muted: #a0a0a0;
+            --border: rgba(197, 163, 104, 0.15);
+            --glass: rgba(10, 10, 10, 0.8);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Inter', sans-serif;
+            --transition: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: initial; /* Controlled by JS for smooth inertia */
+            background-color: var(--bg-deep);
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s var(--transition);
+        }
+
+        .loader-logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+            color: var(--accent);
+            opacity: 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Typography */
+        h1, h2, h3, .heading-serif {
+            font-family: var(--font-display);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        p { font-weight: 200; letter-spacing: 0.03em; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem clamp(1rem, 5vw, 5rem);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.5s var(--transition);
+            backdrop-filter: blur(0px);
+        }
+
+        nav.scrolled {
+            padding: 1.2rem clamp(1rem, 5vw, 5rem);
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            letter-spacing: 0.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        @media (max-width: 768px) { .nav-links { display: none; } }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s var(--transition);
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 1rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.4), rgba(10,10,10,0.9)), 
+                        url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            transform: scale(1.1);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .hero p {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            border: 1px solid var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.4s var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary { background: var(--accent); color: var(--bg-deep); }
+        .btn-primary:hover { background: transparent; color: var(--accent); }
+
+        .btn-outline { color: var(--text-main); background: transparent; }
+        .btn-outline:hover { background: var(--accent); color: var(--bg-deep); }
+
+        /* Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s var(--transition);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* About Section */
+        section { padding: clamp(5rem, 15vw, 12rem) 0; }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        @media (max-width: 992px) {
+            .split-grid { grid-template-columns: 1fr; gap: 3rem; }
+        }
+
+        .reveal-mask {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .reveal-mask img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: scale(1.2);
+            transition: transform 2s var(--transition);
+        }
+
+        .reveal-mask.active img { transform: scale(1); }
+
+        .about-text h2 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Signature Dishes */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 5rem;
+        }
+
+        .dish-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            transition: all 0.5s var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--accent);
+        }
+
+        .dish-image {
+            width: 100%;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .dish-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s var(--transition);
+        }
+
+        .dish-card:hover .dish-image img { transform: scale(1.1); }
+
+        .dish-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .dish-info h3 { font-size: 1.6rem; color: var(--accent); }
+        .dish-price { font-family: var(--font-body); opacity: 0.6; font-size: 0.9rem; }
+
+        /* Chef Section */
+        .chef-section {
+            background: #0f0f0f;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+        }
+
+        @media (max-width: 768px) { .chef-section { grid-template-columns: 1fr; } }
+
+        .chef-img {
+            background: url('https://images.unsplash.com/photo-1583394238182-6f71f218a679?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
+            min-height: 500px;
+        }
+
+        .chef-content {
+            padding: clamp(3rem, 10vw, 8rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Marquee Testimonials */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .marquee-inner {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+        }
+
+        .testimonial {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            margin-right: 5rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .testimonial span { color: var(--accent); font-style: normal; margin-left: 1rem; font-size: 1rem; vertical-align: middle; }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Reservation CTA */
+        .reservation {
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1550966841-3ee7ad6235e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/fixed;
+            padding: 10rem 1rem;
+        }
+
+        .reservation h2 { font-size: clamp(3rem, 7vw, 6rem); margin-bottom: 2rem; }
+
+        /* Footer */
+        footer {
+            padding: 5rem 0 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        .footer-logo { font-size: 2rem; margin-bottom: 1.5rem; display: block; }
+        .footer-title { color: var(--accent); text-transform: uppercase; letter-spacing: 0.2rem; margin-bottom: 1.5rem; display: block; }
+
+        .social-links { display: flex; gap: 1.5rem; margin-top: 1rem; }
+        .social-links a { color: var(--text-main); font-size: 1.2rem; transition: color 0.3s; }
+        .social-links a:hover { color: var(--accent); }
+
+        .copyright {
+            text-align: center;
+            opacity: 0.4;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease, background 0.2s ease;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        @media (pointer: fine) { .cursor { display: block; } }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-logo">ÉLÉVATION</div>
+    </div>
+
+    <div class="cursor"></div>
+
+    <nav id="navbar">
+        <a href="#" class="logo">ÉLÉVATION</a>
+        <div class="nav-links">
+            <a href="#about">Story</a>
+            <a href="#menu">Menu</a>
+            <a href="#chef">Philosophy</a>
+            <a href="#reserve">Reservations</a>
+        </div>
+        <a href="#reserve" class="btn btn-outline" style="padding: 0.7rem 1.5rem; font-size: 0.6rem;">Book</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <h1 id="hero-title">A Symphony of <br><em>Fine Flavors</em></h1>
+        <p id="hero-desc">Experience an avant-garde approach to seasonal gastronomy, where every plate tells a story of heritage and innovation.</p>
+        <div class="btn-group" id="hero-btns">
+            <a href="#reserve" class="btn btn-primary">Reserve a Table</a>
+            <a href="#menu" class="btn btn-outline">View Menu</a>
+        </div>
+    </section>
+
+    <section class="container" id="about">
+        <div class="split-grid">
+            <div class="reveal-mask reveal">
+                <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Dining Room">
+            </div>
+            <div class="about-text">
+                <h2 class="reveal">The Essence of Minimalist Dining</h2>
+                <p class="reveal">Founded on the principles of purity and precision, ÉLÉVATION redefines the luxury dining landscape. We strip away the unnecessary, focusing solely on the raw beauty of ingredients sourced from our private estates.</p>
+                <p class="reveal">Our kitchen is a laboratory of taste, guided by the seasons and a deep reverence for Japanese precision and French technique.</p>
+                <a href="#" class="btn btn-outline reveal">Our Heritage</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="menu">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h2 class="reveal" style="font-size: clamp(2.5rem, 5vw, 4rem);">Signature Creations</h2>
+            <p class="reveal" style="color: var(--accent);">Summer Tasting Menu — 2024</p>
+        </div>
+        
+        <div class="menu-grid">
+            <!-- Card 1 -->
+            <div class="dish-card reveal">
+                <div class="dish-image">
+                    <img src="https://images.unsplash.com/photo-1546039907-7fa05f864c02?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish">
+                </div>
+                <div class="dish-info">
+                    <h3>Forest Emulsion</h3>
+                    <span class="dish-price">$42</span>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.6;">Wild mushrooms, pine needle oil, truffle soil.</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="dish-card reveal">
+                <div class="dish-image">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish">
+                </div>
+                <div class="dish-info">
+                    <h3>Arctic Charr</h3>
+                    <span class="dish-price">$58</span>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.6;">Glacier water cured, sea buckthorn, radish ribbons.</p>
+            </div>
+            <!-- Card 3 -->
+            <div class="dish-card reveal">
+                <div class="dish-image">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dish">
+                </div>
+                <div class="dish-info">
+                    <h3>Golden Sphere</h3>
+                    <span class="dish-price">$36</span>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.6;">Saffron infused nectar, honey glass, edible gold.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="chef-section" id="chef">
+        <div class="chef-img reveal-mask"></div>
+        <div class="chef-content">
+            <h2 class="reveal">The Visionary</h2>
+            <p class="reveal" style="color: var(--accent); letter-spacing: 0.3rem; margin-bottom: 2rem;">CHEF JULIAN VANCE</p>
+            <p class="reveal">"Cuisine is the bridge between nature and culture. At ÉLÉVATION, we don't just cook; we translate the whisper of the wind and the depth of the earth into a sensory language that transcends borders."</p>
+            <div style="margin-top: 3rem;" class="reveal">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Signature_of_Theodore_Roosevelt.svg/2560px-Signature_of_Theodore_Roosevelt.svg.png" alt="Signature" style="filter: invert(1); height: 80px; opacity: 0.5;">
+            </div>
+        </div>
+    </div>
+
+    <div class="marquee">
+        <div class="marquee-inner">
+            <div class="testimonial">"An ethereal journey of the senses." <span>— VOGUE</span></div>
+            <div class="testimonial">"Redefining the boundaries of taste." <span>— GAULT & MILLAU</span></div>
+            <div class="testimonial">"Minimalism at its most powerful." <span>— NY TIMES</span></div>
+            <div class="testimonial">"An ethereal journey of the senses." <span>— VOGUE</span></div>
+            <div class="testimonial">"Redefining the boundaries of taste." <span>— GAULT & MILLAU</span></div>
+            <div class="testimonial">"Minimalism at its most powerful." <span>— NY TIMES</span></div>
+        </div>
+    </div>
+
+    <section class="reservation" id="reserve">
+        <div class="container">
+            <h2 class="reveal">Secure Your Table</h2>
+            <p class="reveal" style="margin-bottom: 3rem;">Limited seatings available for our 12-course tasting experience.</p>
+            <div class="reveal">
+                <a href="#" class="btn btn-primary">Check Availability</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="container">
+        <div class="footer-grid">
+            <div>
+                <span class="logo footer-logo">ÉLÉVATION</span>
+                <p style="opacity: 0.5;">Elevating the standards of modern culinary art through radical simplicity.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div>
+                <span class="footer-title">Location</span>
+                <p style="opacity: 0.6;">422 Obsidian Avenue<br>Highlands, District 09<br>Switzerland</p>
+            </div>
+            <div>
+                <span class="footer-title">Hours</span>
+                <p style="opacity: 0.6;">Tues — Sat: 18:00 - 23:00<br>Sun — Mon: Private Events</p>
+            </div>
+            <div>
+                <span class="footer-title">Contact</span>
+                <p style="opacity: 0.6;">reservations@elevation.com<br>+41 (0) 22 930 44 00</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2024 ÉLÉVATION CULINARY GROUP. DESIGNED FOR EXCELLENCE.
+        </div>
+    </footer>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                animateHero();
+            }, 1000);
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button').forEach(elem => {
+            elem.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.background = 'rgba(197, 163, 104, 0.1)';
+            });
+            elem.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.background = 'transparent';
+            });
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Hero Entrance
+        function animateHero() {
+            const title = document.getElementById('hero-title');
+            const desc = document.getElementById('hero-desc');
+            const btns = document.getElementById('hero-btns');
+            
+            title.style.transition = 'all 1.5s var(--transition)';
+            title.style.opacity = '1';
+            title.style.transform = 'translateY(0)';
+
+            setTimeout(() => {
+                desc.style.transition = 'all 1.5s var(--transition)';
+                desc.style.opacity = '1';
+                desc.style.transform = 'translateY(0)';
+            }, 300);
+
+            setTimeout(() => {
+                btns.style.transition = 'all 1.5s var(--transition)';
+                btns.style.opacity = '1';
+                btns.style.transform = 'translateY(0)';
+            }, 600);
+        }
+
+        // Intersection Observer for Reveal
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .reveal-mask').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Effect on Hero
+        window.addEventListener('scroll', () => {
+            const heroBg = document.querySelector('.hero-bg');
+            const scrolled = window.pageYOffset;
+            heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.4}px)`;
+        });
+
+        // Smooth Scroll for Nav Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

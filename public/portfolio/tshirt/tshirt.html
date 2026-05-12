@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOISE LAB | WEAR LOUD. STAY TRUE.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;500;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --neon-green: #ccff00;
+            --electric-orange: #ff5500;
+            --hot-pink: #ff007a;
+            --deep-black: #0a0a0a;
+            --off-white: #f4f4f4;
+            --silver: #c0c0c0;
+            --font-display: 'Archivo Black', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-accent: 'Syncopate', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: var(--deep-black);
+            color: var(--off-white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.2;
+        }
+
+        /* --- Custom Cursor --- */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: exclusion;
+        }
+
+        .logo {
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.85;
+            text-align: center;
+            text-transform: uppercase;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-title span {
+            display: block;
+            -webkit-text-stroke: 2px var(--neon-green);
+            color: transparent;
+        }
+
+        .hero-title .filled {
+            color: var(--neon-green);
+            -webkit-text-stroke: 0px;
+        }
+
+        .floating-img {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            filter: grayscale(1) contrast(1.2);
+            transition: filter 0.5s ease;
+            z-index: 1;
+        }
+
+        .floating-img:hover {
+            filter: grayscale(0) contrast(1);
+        }
+
+        .img-1 { top: 10%; left: 5%; transform: rotate(-10deg); }
+        .img-2 { bottom: 10%; right: 5%; transform: rotate(15deg); }
+
+        .marquee {
+            position: absolute;
+            bottom: 2rem;
+            width: 100%;
+            background: var(--electric-orange);
+            color: var(--deep-black);
+            padding: 1rem 0;
+            font-family: var(--font-accent);
+            font-weight: 900;
+            font-size: 1.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            transform: rotate(-2deg);
+            z-index: 5;
+        }
+
+        .marquee-inner {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- Featured Collection --- */
+        .catalog-section {
+            padding: 10rem 2rem;
+            background: #111;
+        }
+
+        .section-label {
+            font-family: var(--font-accent);
+            color: var(--hot-pink);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .catalog-card {
+            position: relative;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            overflow: hidden;
+            padding: 1rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .catalog-card:hover {
+            transform: translateY(-10px) skewX(-1deg);
+            border-color: var(--neon-green);
+        }
+
+        .catalog-card .product-img-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .catalog-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Glitch Tee Design */
+        .tee-design {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            pointer-events: none;
+            filter: drop-shadow(0 0 5px var(--neon-green));
+            animation: glitch-design 3s infinite;
+        }
+
+        @keyframes glitch-design {
+            0% { transform: translate(-50%, -50%) skew(0deg); opacity: 1; }
+            5% { transform: translate(-52%, -48%) skew(10deg); opacity: 0.8; }
+            10% { transform: translate(-50%, -50%) skew(0deg); opacity: 1; }
+            15% { transform: translate(-48%, -52%) skew(-10deg); filter: hue-rotate(90deg); }
+            20% { transform: translate(-50%, -50%) skew(0deg); filter: hue-rotate(0deg); }
+        }
+
+        .catalog-card .price-tag {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--neon-green);
+            color: var(--deep-black);
+            padding: 0.5rem 1rem;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            transform: rotate(5deg);
+            z-index: 10;
+        }
+
+        .catalog-card h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* --- Brand Story --- */
+        .story-section {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .story-content {
+            padding: 10% 15%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .story-content h2 {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            line-height: 0.9;
+        }
+
+        .story-image-container {
+            position: relative;
+            background: var(--hot-pink);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mix-blend-mode: multiply;
+            filter: grayscale(1);
+        }
+
+        .badge {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--neon-green);
+            color: var(--deep-black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            top: -75px;
+            right: 10%;
+            animation: rotate 10s linear infinite;
+            z-index: 10;
+            font-family: var(--font-accent);
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Drops / Releases --- */
+        .events-section {
+            padding: 5rem 2rem;
+            background: var(--deep-black);
+        }
+
+        .event-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid #333;
+            transition: padding 0.3s ease;
+        }
+
+        .event-row:hover {
+            padding-left: 2rem;
+            background: var(--electric-orange);
+            color: var(--deep-black);
+        }
+
+        .event-date { font-family: var(--font-accent); width: 150px; }
+        .event-name { font-family: var(--font-display); font-size: 3rem; flex: 1; }
+        .event-cta { font-family: var(--font-accent); text-decoration: underline; }
+
+        /* --- Pre-Order Form --- */
+        .order-section {
+            padding: 10rem 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .order-form {
+            width: 100%;
+            max-width: 800px;
+            background: var(--off-white);
+            color: var(--deep-black);
+            padding: 4rem;
+            position: relative;
+            transform: rotate(1deg);
+        }
+
+        .order-form h2 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 0;
+            background: transparent;
+            border: none;
+            border-bottom: 4px solid var(--deep-black);
+            font-family: var(--font-body);
+            font-size: 1.5rem;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .submit-btn {
+            background: var(--hot-pink);
+            color: white;
+            padding: 1.5rem 3rem;
+            border: none;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: var(--deep-black);
+            color: var(--neon-green);
+            transform: scale(1.02) rotate(-2deg);
+        }
+
+        footer {
+            padding: 5rem 2rem;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .story-section { grid-template-columns: 1fr; }
+            .hero-title { font-size: 4rem; }
+            .nav-links { display: none; }
+            .event-name { font-size: 1.5rem; }
+            .order-form { padding: 2rem; }
+            .order-form h2 { font-size: 2.5rem; }
+            .floating-img { width: 150px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <div class="grain"></div>
+
+    <nav>
+        <div class="logo">NOISE<span style="color:var(--neon-green)">LAB</span></div>
+        <div class="nav-links">
+            <a href="#collection">Lookbook</a>
+            <a href="#story">Origin</a>
+            <a href="#drops">Drops</a>
+            <a href="#waitlist">Waitlist</a>
+        </div>
+        <div class="cart-icon"><i class="fas fa-shopping-bag"></i> (0)</div>
+    </nav>
+
+    <section class="hero">
+        <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&q=80&w=600" alt="Streetwear Hoodie" class="floating-img img-1">
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=600" alt="Streetwear Model" class="floating-img img-2">
+        
+        <h1 class="hero-title">
+            <span>STATIC</span>
+            <span class="filled">SYSTEM</span>
+            <span>001</span>
+        </h1>
+
+        <div class="marquee">
+            <div class="marquee-inner">
+                EXPERIMENTAL GARMENTS // LIMITED RELEASE // WORLDWIDE SHIPPING // NOISE LAB AUTUMN DROP 2024 // BREAK THE NORM // STAY LOUD //
+                EXPERIMENTAL GARMENTS // LIMITED RELEASE // WORLDWIDE SHIPPING // NOISE LAB AUTUMN DROP 2024 // BREAK THE NORM // STAY LOUD //
+            </div>
+        </div>
+    </section>
+
+    <section id="collection" class="catalog-section">
+        <span class="section-label">[ 01. THE VAULT ]</span>
+        <div class="catalog-grid">
+            <div class="catalog-card">
+                <span class="price-tag">$85</span>
+                <div class="product-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800" alt="White Tee">
+                    <svg class="tee-design" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <text x="50%" y="50%" text-anchor="middle" font-family="Archivo Black" font-size="20" fill="var(--neon-green)">NOISE</text>
+                        <rect x="20" y="55" width="60" height="2" fill="var(--neon-green)" />
+                        <rect x="30" y="60" width="40" height="2" fill="var(--electric-orange)" />
+                    </svg>
+                </div>
+                <h3>GLITCH TEE</h3>
+                <p>Oversized fit. 300GSM Heavy cotton. Distorted graphics.</p>
+            </div>
+            <div class="catalog-card">
+                <span class="price-tag">$140</span>
+                <div class="product-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800" alt="Cyber Hoodie">
+                </div>
+                <h3>SIGNAL HOODIE</h3>
+                <p>Cyber-punk aesthetic. Reflective drawstrings. Boxy fit.</p>
+            </div>
+            <div class="catalog-card">
+                <span class="price-tag">$110</span>
+                <div class="product-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&q=80&w=800" alt="Tech Shorts">
+                </div>
+                <h3>DATA PANTS</h3>
+                <p>Waterproof tech-wear. Modular pockets. Adjustable hem.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="story" class="story-section">
+        <div class="story-content">
+            <span class="section-label">[ 02. OUR ETHOS ]</span>
+            <h2>DISTURB THE SILENCE</h2>
+            <p>Noise Lab isn't just a brand; it's a frequency. We exist for the outsiders, the creators, and the ones who find beauty in the static. Every piece is a modular expression of modern chaos.</p>
+        </div>
+        <div class="story-image-container">
+            <div class="badge">EST. 2024 • NOISE LAB • </div>
+            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=1000" alt="Street Style" class="story-image">
+        </div>
+    </section>
+
+    <section id="drops" class="events-section">
+        <span class="section-label">[ 03. UPCOMING DROPS ]</span>
+        <div class="event-row">
+            <div class="event-date">SEPT 12</div>
+            <div class="event-name">NEON VOID COLLECTION</div>
+            <div class="event-cta">REMIND ME</div>
+        </div>
+        <div class="event-row">
+            <div class="event-date">OCT 05</div>
+            <div class="event-name">TOKYO POP-UP SHOP</div>
+            <div class="event-cta">LOCATION</div>
+        </div>
+        <div class="event-row">
+            <div class="event-date">NOV 20</div>
+            <div class="event-name">ARCHIVE DROP #04</div>
+            <div class="event-cta">WAITLIST</div>
+        </div>
+    </section>
+
+    <section id="waitlist" class="order-section">
+        <div class="order-form">
+            <h2>JOIN THE PROTOCOL</h2>
+            <p>Early access to limited drops. No spam, just signal.</p>
+            <div class="input-group">
+                <input type="email" placeholder="YOUR@EMAIL.COM">
+            </div>
+            <button class="submit-btn">GET ACCESS</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">NOISE<span style="color:var(--neon-green)">LAB</span></div>
+        <p>©2024 ALL RIGHTS RESERVED BY NOISE LAB INDUSTRIES</p>
+        <div style="margin-top: 2rem; font-size: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-tiktok"></i>
+            <i class="fab fa-discord"></i>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('#custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, {
+                x: e.clientX - 10,
+                y: e.clientY - 10,
+                duration: 0.1
+            });
+        });
+
+        document.querySelectorAll('a, button, .catalog-card').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(4)';
+                cursor.style.backgroundColor = 'var(--hot-pink)';
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.backgroundColor = 'var(--neon-green)';
+            });
+        });
+
+        // Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from(".hero-title span", {
+            y: 100,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power4.out"
+        });
+
+        gsap.to(".img-1", {
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                scrub: 1
+            },
+            y: -100,
+            rotate: 5
+        });
+
+        gsap.to(".img-2", {
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                scrub: 1
+            },
+            y: 100,
+            rotate: -5
+        });
+
+        // Horizontal Parallax for Cards
+        gsap.from(".catalog-card", {
+            scrollTrigger: {
+                trigger: ".catalog-grid",
+                start: "top 80%"
+            },
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.1
+        });
+    </script>
+</body>
+</html>
