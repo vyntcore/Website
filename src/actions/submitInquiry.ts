@@ -173,7 +173,7 @@ export async function submitInquiryAction(formData: {
     
 // 3. Trigger n8n Lead Response System
 try {
-  await fetch(""https://telling-cached-oral-blond.trycloudflare.com/webhook/vyntcore-lead-response", {
+  await fetch("https://telling-cached-oral-blond.trycloudflare.com/webhook/vyntcore-lead-response", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
