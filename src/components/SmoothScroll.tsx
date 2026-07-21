@@ -40,7 +40,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   }, []);
 
   return (
-    <ReactLenis root ref={lenisRef} autoRaf={false} options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
+    <ReactLenis root ref={lenisRef} autoRaf={false} options={{ lerp: 0.08, duration: 1.2, smoothWheel: false }}>
       <ScrollSync />
       {children}
     </ReactLenis>
