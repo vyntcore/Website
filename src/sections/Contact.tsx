@@ -136,7 +136,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       className={`w-full bg-transparent border-b px-0 py-3 text-white focus:outline-none transition-colors placeholder:text-gray-600 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-[var(--color-emerald-accent)]'}`}
-                      placeholder="John Doe"
+                      placeholder="Your Name"
                     />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </motion.div>
@@ -165,7 +165,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     className={`w-full bg-transparent border-b px-0 py-3 text-white focus:outline-none transition-colors placeholder:text-gray-600 ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-[var(--color-emerald-accent)]'}`}
-                    placeholder="john@example.com"
+                    
                   />
                   {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
                 </motion.div>
@@ -178,7 +178,7 @@ export default function Contact() {
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-[var(--color-emerald-accent)] transition-colors placeholder:text-gray-600"
-                    placeholder="+1 (555) 000-0000"
+                    
                   />
                 </div>
 
