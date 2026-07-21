@@ -170,6 +170,25 @@ export async function submitInquiryAction(formData: {
       // since the data is safely in Supabase. We just log it.
       console.error("Resend email error:", emailError);
     }
+    
+// 3. Trigger n8n Lead Response System
+try {
+  await fetch(""https://telling-cached-oral-blond.trycloudflare.com/webhook/vyntcore-lead-response", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+    }),
+  });
+} catch (n8nError) {
+  console.error("n8n webhook error:", n8nError);
+}
 
     return { success: true };
   } catch (err) {
