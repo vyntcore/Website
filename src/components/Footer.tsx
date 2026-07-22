@@ -24,20 +24,43 @@ export default function Footer() {
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Elevating digital presence for modern businesses. We build high-performance, conversion-optimized web experiences.
             </p>
-            <div className="flex items-center gap-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <SocialIcon path="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <SocialIcon path="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <SocialIcon path="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <SocialIcon path="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-              </Link>
-            </div>
+            <div className="flex items-center gap-5">
+  {/* Facebook */}
+  <Link
+    href="https://www.facebook.com/profile.php?id=61591201212317"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-gray-400 hover:text-[var(--color-emerald-accent)] transition-colors"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.019 4.388 11.009 10.125 11.927v-8.437H7.078v-3.49h3.047V9.41c0-3.017 1.792-4.686 4.533-4.686 1.312 0 2.686.235 2.686.235v2.96h-1.514c-1.491 0-1.956.93-1.956 1.885v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.082 24 18.092 24 12.073z"/>
+    </svg>
+  </Link>
+
+  {/* Instagram */}
+  <Link
+    href="https://www.instagram.com/vynt.core/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-gray-400 hover:text-[var(--color-emerald-accent)] transition-colors"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+    </svg>
+  </Link>
+</div>
           </div>
 
           {/* Links */}
